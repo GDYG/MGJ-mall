@@ -1,11 +1,15 @@
 <template>
   <div id="home">
     <NavBar class="home-nav"><div slot="center">蘑菇街</div></NavBar>
-    <Sliders :banners="banners"></Sliders>
-    <RecommendView :recommends="recommends"></RecommendView>
-    <Feature></Feature>
-    <TabControl class="tab-control" :title="['流行', '新款', '精选']" @tabClick="tabClicks"></TabControl>
-    <GoodsList :goods="goods[countType].list"></GoodsList>
+    <backTab class="back-top" @click.native="backClick" v-if="isActive" ref="back-top"></backTab>
+    <Scroll class="content" ref="scroll" :probe-type="3" @scroll="homeScroll" :pull-up-load="true" @pullingUp="pullingUp">
+      <Sliders :banners="banners"></Sliders>
+      <RecommendView :recommends="recommends"></RecommendView>
+      <Feature></Feature>
+      <TabControl class="tab-control" :title="['流行', '新款', '精选']" @tabClick="tabClicks"></TabControl>
+      <GoodsList :goods="goods[countType].list"></GoodsList>
+    </Scroll>
+
   </div>
 </template>
 
@@ -14,6 +18,8 @@
   import Sliders from 'components/common/swiper/Sliders'
   import TabControl from 'components/content/tabControl/TabControl'
   import GoodsList from 'components/content/goods/GoodsList'
+  import Scroll from 'components/scroll/Scroll'
+  import backTab from 'components/content/backTab'
 
   import RecommendView from './childrenhome/RecomendView'
   import Feature from './childrenhome/Feature'
@@ -26,6 +32,8 @@
       Sliders,
       TabControl,
       GoodsList,
+      Scroll,
+      backTab,
 
       RecommendView,
       Feature
@@ -39,7 +47,9 @@
               'new': {page: 0, list: []},
               'sell': {page: 0, list: []}
             },
-        countType: 'pop'
+        countType: 'pop',
+        isActive: false,
+        homeScrolls: document.querySelector('.back-top')
       }
     },
     created() {
@@ -51,15 +61,14 @@
       this.getHomeGoods('new');
       this.getHomeGoods('sell');
 
-
     },
+
     methods: {
       //请求多个数据
       getHomeMultidata() {
         getHomeMultidata().then(res => {
           this.banners = res.data.banner.list;
           this.recommends = res.data.recommend.list;
-          console.log(this.recommends)
         })
       },
 
@@ -68,8 +77,15 @@
         const page = this.goods[type].page + 1;
         getHomeGoods(type, page).then(res => {
           this.goods[type].list.push(...res.data.list);
-          this.goods[type].page += 1
+          this.goods[type].page += 1;
+
+          this.$refs.scroll.finishPullUp();
         })
+      },
+      pullingUp() {
+        this.getHomeGoods(this.countType)
+
+        this.$refs.scroll.scroll.refresh()
       },
 
       tabClicks(index) {
@@ -85,14 +101,28 @@
             this.countType = 'sell';
             break;
         }
+      },
+
+      backClick() {
+        this.$refs.scroll.scrollTo(0, 0, 500)
+      },
+
+      homeScroll(position) {
+        if(position.y <= -1000) {
+          this.isActive = true
+        }else {
+          this.isActive = false
+        }
       }
     }
   }
+
 </script>
 
 <style scoped>
   #home {
     padding-top: 44px;
+    height: 100vh;
   }
 .home-nav {
   background-color: var(--color-tint);
@@ -107,5 +137,14 @@
   .tab-control {
     position: sticky;
     top: 44px;
+  }
+  .content {
+    height: calc(100% - 49px);
+    overflow: hidden;
+  }
+  .back-top {
+    position: fixed;
+    bottom: 70px;
+    right: 5px;
   }
 </style>
