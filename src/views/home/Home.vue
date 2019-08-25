@@ -1,12 +1,17 @@
 <template>
   <div id="home">
     <NavBar class="home-nav"><div slot="center">蘑菇街</div></NavBar>
+    <TabControl class="tab-controls"
+                :title="['流行', '新款', '精选']"
+                @tabClick="tabClicks" ref="tabControl1" v-show="isShow"></TabControl>
     <backTab class="back-top" @click.native="backClick" v-if="isActive" ref="back-top"></backTab>
     <Scroll class="content" ref="scroll" :probe-type="3" @scroll="homeScroll" :pull-up-load="true" @pullingUp="pullingUp">
-      <Sliders :banners="banners"></Sliders>
+      <Sliders :banners="banners" @sliderImageLoad="sliderImageLoad"></Sliders>
       <RecommendView :recommends="recommends"></RecommendView>
       <Feature></Feature>
-      <TabControl class="tab-control" :title="['流行', '新款', '精选']" @tabClick="tabClicks"></TabControl>
+      <TabControl class="tab-control"
+                  :title="['流行', '新款', '精选']"
+                  @tabClick="tabClicks" ref="tabControl" v-show="!isShow"></TabControl>
       <GoodsList :goods="goods[countType].list"></GoodsList>
     </Scroll>
 
@@ -23,6 +28,7 @@
 
   import RecommendView from './childrenhome/RecomendView'
   import Feature from './childrenhome/Feature'
+  import {itemMixin} from 'common/itemMixin'
 
   import {getHomeMultidata, getHomeGoods} from 'network/home'
   export default {
@@ -49,7 +55,10 @@
             },
         countType: 'pop',
         isActive: false,
-        homeScrolls: document.querySelector('.back-top')
+        isShow: false,
+        homeScrolls: document.querySelector('.back-top'),
+        tabOffsetTop: 0,
+        saveY: 0, //保存首页离开时的位置
       }
     },
     created() {
@@ -60,10 +69,27 @@
       this.getHomeGoods('pop');
       this.getHomeGoods('new');
       this.getHomeGoods('sell');
-
     },
+    mixins: [itemMixin], //将里面的东西和mounted里面的混合
+    mounted() {
+    },
+    activated() {
+      this.$refs.scroll.scrollTo(0, this.saveY, 0) //回到首页时将位置保留在位置Y
+      this.$refs.scroll.scroll.refresh()
+    },
+    deactivated() {
+      this.saveY = this.$refs.scroll.getSaveY() //记住首页离开时的位置Y
+      console.log(this.saveY)
 
+      //取消全局事件的监听
+      this.$bus.$off('itemImageLoad', this.homeImageLoad)
+    },
     methods: {
+      //监听轮播图加载完成
+      sliderImageLoad() {
+        this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop
+      },
+
       //请求多个数据
       getHomeMultidata() {
         getHomeMultidata().then(res => {
@@ -77,6 +103,7 @@
         const page = this.goods[type].page + 1;
         getHomeGoods(type, page).then(res => {
           this.goods[type].list.push(...res.data.list);
+
           this.goods[type].page += 1;
 
           this.$refs.scroll.finishPullUp();
@@ -85,11 +112,9 @@
       pullingUp() {
         this.getHomeGoods(this.countType)
 
-        this.$refs.scroll.scroll.refresh()
       },
 
       tabClicks(index) {
-        console.log(index)
         switch (index) {
           case 0:
             this.countType = 'pop';
@@ -101,6 +126,9 @@
             this.countType = 'sell';
             break;
         }
+
+        this.$refs.tabControl1.countIndex = index
+        this.$refs.tabControl.countIndex = index
       },
 
       backClick() {
@@ -113,6 +141,8 @@
         }else {
           this.isActive = false
         }
+
+          this.isShow = (-position.y) > (this.tabOffsetTop - 44)
       }
     }
   }
@@ -121,25 +151,26 @@
 
 <style scoped>
   #home {
-    padding-top: 44px;
+    /*padding-top: 44px;*/
     height: 100vh;
+
   }
 .home-nav {
   background-color: var(--color-tint);
   color: #fff;
 
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  z-index: 100;
+  /*position: fixed;*/
+  /*left: 0;*/
+  /*right: 0;*/
+  /*top: 0;*/
+  /*z-index: 100;*/
 }
-  .tab-control {
-    position: sticky;
-    top: 44px;
-  }
+  /*.tab-control {*/
+  /*  position: sticky; //停留效果 */
+  /*  top: 44px;*/
+  /*}*/
   .content {
-    height: calc(100% - 49px);
+    height: calc(100% - 93px);
     overflow: hidden;
   }
   .back-top {
@@ -147,4 +178,7 @@
     bottom: 70px;
     right: 5px;
   }
+.tab-controls {
+
+}
 </style>

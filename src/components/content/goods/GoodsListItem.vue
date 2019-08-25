@@ -1,13 +1,13 @@
 <template>
-  <div class="goods-item">
-    <img :src="goodsItem.show.img" alt="" :key="showImage">
-    <div class="goods-info">
-      <p>{{goodsItem.title}}</p>
-      <span class="icon-coin-yen"></span>
-      <span class="price">{{goodsItem.price}}</span>
-      <span class="icon-star-empty"></span>
-      <span class="collect">{{goodsItem.cfav}}</span>
-    </div>
+  <div class="goods-item" @click="itemClick">
+      <img :src="showImage" alt="" :key="showImage" :load="itemImgLoad">
+      <div class="goods-info">
+        <p>{{goodsItem.title}}</p>
+        <span class="icon-coin-yen"></span>
+        <span class="price">{{goodsItem.price}}</span>
+        <span class="icon-star-empty"></span>
+        <span class="collect">{{goodsItem.cfav}}</span>
+      </div>
   </div>
 </template>
 
@@ -25,6 +25,14 @@
         default() {
           return {}
         }
+      }
+    },
+    methods: {
+      itemImgLoad() {
+        this.$bus.$emit('itemImageLoad')
+      },
+      itemClick() {
+        this.$router.push('/detail/' + this.goodsItem.iid)
       }
     }
   }

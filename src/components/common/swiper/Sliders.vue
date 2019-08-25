@@ -7,7 +7,7 @@
       <slideritem v-for="(item,index) in someList" :key="index" >
        <div class="slider-item">
          <a :href="item.link" :title="item.title">
-           <img :src="item.image" :alt="item.title">
+           <img :src="item.image" :alt="item.title" @load="imageLoad">
          </a>
        </div>
       </slideritem>
@@ -56,6 +56,11 @@
       setTimeout(function () {
         that.someList = that.banners
       }, 2000)
+    },
+    methods: {
+      imageLoad() {
+        this.$emit('sliderImageLoad')
+      }
     }
   }
 </script>
