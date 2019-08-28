@@ -8,7 +8,7 @@
     </div>
     <div class="info-key">{{detailInfo.detailImage[0].key}}</div>
     <div class="info-list">
-      <img v-for="(item, index) in detailInfo.detailImage[0].list" :key="index" :src="item" alt="" :load="imageLoad">
+      <img v-for="(item, index) in detailInfo.detailImage[0].list" :key="index" :src="item" alt="" @load="imageLoad">
     </div>
   </div>
 </template>
@@ -32,10 +32,13 @@
     },
     methods: {
       imageLoad() {
-        if(++countImg === finImg) {
-          this.$emit('finImage')
-          console.log(this.finImg)
-        }
+        this.$emit('finImage')
+
+        //不用防抖函数时
+        // if(++countImg === finImg) {
+        //   this.$emit('finImage')
+        //   console.log(this.finImg)
+        // }
       }
     },
     watch: {

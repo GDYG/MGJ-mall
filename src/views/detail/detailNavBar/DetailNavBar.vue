@@ -29,6 +29,7 @@
     methods: {
       titlesIndex(index) {
         this.countIndex = index
+        this.$emit('detailTop', index)
       },
       leftClick() {
         this.$router.go(-1)

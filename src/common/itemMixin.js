@@ -1,4 +1,4 @@
-import debounce from './debounce'
+import {debounce} from './debounce'
 export const itemMixin = {
   data() {
     return {
@@ -7,7 +7,7 @@ export const itemMixin = {
   },
   mounted() {
     //防抖动函数debounce
-    const refresh = debounce(this.$refs.scroll.scroll.refresh, 50)
+    let refresh = debounce(this.$refs.scroll.scroll.refresh, 100)
     //监听图片加载完成
     this.homeImageLoad = () => {
       refresh()

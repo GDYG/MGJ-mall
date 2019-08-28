@@ -79,7 +79,7 @@
     },
     deactivated() {
       this.saveY = this.$refs.scroll.getSaveY() //记住首页离开时的位置Y
-      console.log(this.saveY)
+      // console.log(this.saveY)
 
       //取消全局事件的监听
       this.$bus.$off('itemImageLoad', this.homeImageLoad)
@@ -111,7 +111,6 @@
       },
       pullingUp() {
         this.getHomeGoods(this.countType)
-
       },
 
       tabClicks(index) {

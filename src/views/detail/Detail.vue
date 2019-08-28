@@ -1,15 +1,17 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-bar"></detail-nav-bar>
-    <Scroll class="content" ref="scroll">
+    <detail-nav-bar class="detail-bar" @detailTop="detailTopY" ref="navbarIndex"></detail-nav-bar>
+    <scroll class="content" ref="scroll" :probe-type="3" @scroll="detailScroll">
       <detail-slider :topImgs="topImgs"></detail-slider>
       <detail-base-info :goods="goods"></detail-base-info>
       <detail-shop-info :shop="shop"></detail-shop-info>
       <detail-info :detailInfo="detailInfo" @finImage="finImages"></detail-info>
-      <detail-param-info :paramInfo="paramInfo"></detail-param-info>
-      <detail-comment-info :commentInfo="commentInfo"></detail-comment-info>
-      <goods-list :goods="recommends"></goods-list>
-    </Scroll>
+      <detail-param-info :paramInfo="paramInfo" ref="paramInfo"></detail-param-info>
+      <detail-comment-info :commentInfo="commentInfo" ref="commentInfo"></detail-comment-info>
+      <goods-list :goods="recommends" ref="recommends"></goods-list>
+    </scroll>
+    <back-tabs class="back-top" @click.native="backClick" v-if="isActive" ref="back-top"></back-tabs>
+    <detail-bottom-bar @addToCart="addToCart"></detail-bottom-bar>
   </div>
 </template>
 
@@ -19,6 +21,8 @@
   import Scroll from 'components/scroll/Scroll'
   import GoodsList from 'components/content/goods/GoodsList'
   import {itemMixin} from 'common/itemMixin'
+  import {debounce} from 'common/debounce'
+  import backTabs from 'components/content/backTab'
 
   import DetailSlider from './detailNavBar/DetailSlider'
   import DetailBaseInfo from './detailNavBar/DetailBaseInfo'
@@ -26,6 +30,7 @@
   import DetailInfo from './detailNavBar/DetailInfo'
   import DetailParamInfo from './detailNavBar/DetailParamInfo'
   import DetailCommentInfo from './detailNavBar/DetailCommentInfo'
+  import DetailBottomBar from './detailNavBar/DetailBottomBar'
   export default {
     name: "Detail",
     components: {
@@ -37,7 +42,9 @@
       DetailInfo,
       DetailParamInfo,
       DetailCommentInfo,
-      GoodsList
+      GoodsList,
+      DetailBottomBar,
+      backTabs
     },
     data() {
       return {
@@ -48,13 +55,55 @@
         detailInfo: {},
         paramInfo: {},
         commentInfo: {},
-        recommends: []
+        recommends: [],
+        navbarTopY: [],
+        getTop: null,
+        isActive: false
       }
     },
     methods: {
         finImages() {
           this.$refs.scroll.scroll.refresh()
+
+
+          //图片加载完成层之后能正确获取$el
+          this.getTop()
         },
+
+        //导航联动效果
+      detailTopY(index) {
+        console.log(this.$refs.paramInfo.$el.offsetTop)
+        this.$refs.scroll.scrollTo(0, -this.navbarTopY[index], 300)
+      },
+      detailScroll(position) {
+          if(-position.y >= 0 && -position.y < this.navbarTopY[1]) {
+            this.$refs.navbarIndex.countIndex = 0
+          }else if(-position.y >= this.navbarTopY[1] && -position.y < this.navbarTopY[2]) {
+            this.$refs.navbarIndex.countIndex = 1
+          }else if(-position.y >= this.navbarTopY[2] && -position.y < this.navbarTopY[3]) {
+            this.$refs.navbarIndex.countIndex = 2
+          }else if(-position.y >= this.navbarTopY[3]) {
+            this.$refs.navbarIndex.countIndex = 3
+          }
+
+          this.isActive = (-position.y) > 1000
+      },
+      backClick() {
+        this.$refs.scroll.scrollTo(0, 0, 500)
+      },
+
+      //加入购物车
+      addToCart() {
+        const product = {}
+        product.iid = this.iid
+        product.image = this.topImgs[0]
+        product.title = this.goods.title
+        product.desc = this.goods.desc
+        product.price = this.goods.realPrice
+
+        //添加商品
+        this.$store.dispatch('cartAdd', product)
+      }
     },
     mixins: [itemMixin],
     mounted() {
@@ -66,7 +115,7 @@
       this.iid = this.$route.params.iid
 
       getDetail(this.iid).then(res => {
-        console.log(res.result)
+        // console.log(res.result)
         const data = res.result
         this.topImgs.push(...data.itemInfo.topImages)
 
@@ -92,6 +141,17 @@
       getReCommend().then(res => {
         this.recommends = res.data.list
       })
+
+      //图片加载完成层之后能正确获取$el
+      this.getTop = debounce(() => {
+        this.navbarTopY = []
+        this.navbarTopY.push(0)
+        this.navbarTopY.push(this.$refs.paramInfo.$el.offsetTop - 44)
+        this.navbarTopY.push(this.$refs.commentInfo.$el.offsetTop - 44)
+        this.navbarTopY.push(this.$refs.recommends.$el.offsetTop - 44)
+        console.log('-------');
+      }, 100)
+
     }
   }
 </script>
@@ -104,11 +164,17 @@
     height: 100vh;
   }
   .content {
-    height: calc(100% - 44px);
+    height: calc(100% - 44px - 58px);
+    overflow: hidden;
   }
   .detail-bar {
     position: relative;
     z-index: 10;
     background-color: #fff;
+  }
+  .back-top {
+    position: fixed;
+    bottom: 70px;
+    right: 5px;
   }
 </style>

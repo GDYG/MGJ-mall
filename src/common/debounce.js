@@ -1,10 +1,12 @@
 //防抖动函数
-export default function debounce(func, delay) {
+export function debounce(func, delay) {
   let time = null;
   return function (...args) {
-    if(time) clearTimeout(time)
+    if(time) {
+      clearTimeout(time)
+    }
     time = setTimeout(() => {
-      func,apply(this, args)
+      func.apply(this, args)
     },delay)
   }
 }
