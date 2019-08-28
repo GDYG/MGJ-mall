@@ -19,15 +19,32 @@
   
   * 处理滚动频繁刷新：通过使用debounce防抖函数进行处理
   
-  ***项目演示***
+***项目演示***
   
-    * '首页'部分
-    
-    * '分类'部分
-    
-    * '购物车'部分
+* '首页'部分
+***主页***
+
+![home](https://github.com/GDYG/MGJ-mall/blob/master/src/assets/css/images/home.jpg)
+
+***新款***
+
+![home](https://github.com/GDYG/MGJ-mall/blob/master/src/assets/css/images/new.jpg)
+
+***流行***
+
+![home](https://github.com/GDYG/MGJ-mall/blob/master/src/assets/css/images/pop.jpg)
+
+***精选***
+
+![home](https://github.com/GDYG/MGJ-mall/blob/master/src/assets/css/images/sell.jpg)
       
-    * '我的'部分
+* '分类'部分
+    
+* '购物车'部分
+
+![home](https://github.com/GDYG/MGJ-mall/blob/master/src/assets/css/images/cart.jpg)
+
+* '我的'部分
 
 ## 项目的优点
   
