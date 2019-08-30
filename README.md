@@ -25,6 +25,7 @@
 ***主页***
 
 ![home](https://github.com/GDYG/MGJ-mall/blob/master/src/assets/css/images/home.jpg)
+![home](https://github.com/GDYG/MGJ-mall/blob/master/src/assets/css/images/detail.jpg)
 
 ***新款***
 
