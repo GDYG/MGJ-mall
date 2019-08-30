@@ -4,7 +4,7 @@
     <!-- 配置slider组件 -->
     <slider ref="slider" :options="options">
       <!-- 直接使用slideritem slot -->
-      <slideritem v-for="(item,index) in someList" :key="index" >
+      <slideritem v-for="(item,index) in banners" :key="index" >
        <div class="slider-item">
          <a :href="item.link" :title="item.title">
            <img :src="item.image" :alt="item.title" @load="imageLoad">
@@ -12,7 +12,7 @@
        </div>
       </slideritem>
       <!-- 设置loading,可自定义 -->
-      <div slot="loading">loading...</div>
+<!--      <div slot="loading">loading...</div>-->
     </slider>
   </div>
 </template>
@@ -30,14 +30,11 @@
     },
     data () {
       return {
-        //Image list
-        someList:[],
-        //Sliding configuration [obj]
         options: {
           currentPage: 0,
-          thresholdDistance:500,
-          thresholdTime:100,
-          autoplay:3000,
+          thresholdDistance:100,
+          thresholdTime:500,
+          autoplay:1000,
           loop:true,
           direction:'level',
           loopedSlides:1,
@@ -52,10 +49,11 @@
       slideritem
     },
     mounted () {
-      let that = this
-      setTimeout(function () {
-        that.someList = that.banners
-      }, 2000)
+      // let that = this
+      // setTimeout(function () {
+      //   that.someList = that.banners
+      // }, 2000)
+      // this.someList = this.banners
     },
     methods: {
       imageLoad() {
@@ -72,9 +70,6 @@
   height:170px;
 }
   .sliders .slider-item img {
-
-  }
-  img {
     width: 100%;
     height: 170px;
   }

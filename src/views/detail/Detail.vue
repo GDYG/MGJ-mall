@@ -23,6 +23,7 @@
   import {itemMixin} from 'common/itemMixin'
   import {debounce} from 'common/debounce'
   import backTabs from 'components/content/backTab'
+  // import Toast from 'components/common/toast/Toast'
 
   import DetailSlider from './detailNavBar/DetailSlider'
   import DetailBaseInfo from './detailNavBar/DetailBaseInfo'
@@ -45,6 +46,7 @@
       GoodsList,
       DetailBottomBar,
       backTabs
+      // Toast
     },
     data() {
       return {
@@ -58,7 +60,10 @@
         recommends: [],
         navbarTopY: [],
         getTop: null,
-        isActive: false
+        isActive: false,
+
+        // message: '',
+        // isShow: false
       }
     },
     methods: {
@@ -102,7 +107,16 @@
         product.price = this.goods.realPrice
 
         //添加商品
-        this.$store.dispatch('cartAdd', product)
+        this.$store.dispatch('cartAdd', product).then(res => {
+          // this.message = res;
+          // this.isShow = true;
+          // setTimeout(() => {
+          //   this.isShow = false
+          //   this.message = ''
+          // },1500)
+
+          this.$toast.show(res, 1500)
+        })
       }
     },
     mixins: [itemMixin],
