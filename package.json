@@ -33,11 +33,12 @@
           "unitPrecision": 5,
           "viewportUnit": "vw",
           "fontViewportUnit": "vw",
-          "selectorBlackList": ["tab-bar","tab-bar-item"],
+          "selectorBlackList": [".ignore",".tab-bar",".nav-bar"],
           "minPixelValue": 1,
           "mediaQuery": false,
           "landscapeUnit": "vw",
-          "landscapeWidth": 667
+          "landscapeWidth": 667,
+          "exclude": ["/Tabbar/","/NavBar/"]
         }
       }
     }

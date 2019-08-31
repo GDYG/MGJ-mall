@@ -68,8 +68,8 @@
     },
     methods: {
         finImages() {
-          this.$refs.scroll.scroll.refresh()
-
+          // this.$refs.scroll.scroll.refresh()
+          this.homeImageLoad()
 
           //图片加载完成层之后能正确获取$el
           this.getTop()
@@ -79,6 +79,7 @@
       detailTopY(index) {
         console.log(this.$refs.paramInfo.$el.offsetTop)
         this.$refs.scroll.scrollTo(0, -this.navbarTopY[index], 300)
+        console.log(-this.navbarTopY[index])
       },
       detailScroll(position) {
           if(-position.y >= 0 && -position.y < this.navbarTopY[1]) {
@@ -156,7 +157,7 @@
         this.recommends = res.data.list
       })
 
-      //图片加载完成层之后能正确获取$el
+      //图片加载完成之后能正确获取$el
       this.getTop = debounce(() => {
         this.navbarTopY = []
         this.navbarTopY.push(0)
@@ -164,8 +165,8 @@
         this.navbarTopY.push(this.$refs.commentInfo.$el.offsetTop - 44)
         this.navbarTopY.push(this.$refs.recommends.$el.offsetTop - 44)
         console.log('-------');
-      }, 100)
-
+        console.log(this.navbarTopY[1])
+      }, 300)
     }
   }
 </script>

@@ -141,7 +141,7 @@
           this.isActive = false
         }
 
-          this.isShow = (-position.y) > (this.tabOffsetTop - 44)
+        this.isShow = (-position.y) > (this.tabOffsetTop - 44)
       }
     }
   }

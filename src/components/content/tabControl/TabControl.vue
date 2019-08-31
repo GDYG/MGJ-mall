@@ -19,6 +19,7 @@
       itemClick(index) {
         this.countIndex = index;
         this.$emit('tabClick', index);
+        this.$bus.$emit('tabClick1', index)
       }
     },
     props: {

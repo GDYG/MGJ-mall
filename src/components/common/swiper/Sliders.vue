@@ -34,7 +34,7 @@
           currentPage: 0,
           thresholdDistance:100,
           thresholdTime:500,
-          autoplay:1000,
+          autoplay:3000,
           loop:true,
           direction:'level',
           loopedSlides:1,

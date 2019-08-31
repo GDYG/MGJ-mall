@@ -1,5 +1,5 @@
 <template>
-  <div class="tab-bar-item" @click="btnClick">
+  <div class="tab-bar-item ignore" @click="btnClick">
     <div :style="isActive"><slot name="item-icon"></slot></div>
     <div :style="isActive"><slot name="item-text"></slot></div>
   </div>
