@@ -75,7 +75,7 @@
     },
     activated() {
       this.$refs.scroll.scrollTo(0, this.saveY, 0) //回到首页时将位置保留在位置Y
-      this.$refs.scroll.scroll.refresh()
+      this.$refs.scroll.refresh()
     },
     deactivated() {
       this.saveY = this.$refs.scroll.getSaveY() //记住首页离开时的位置Y

@@ -53,6 +53,9 @@
       finishPullUp() {
        this.scroll && this.scroll.finishPullUp()
       },
+      refresh() {
+        this.scroll && this.scroll.refresh()
+      },
       getSaveY() {
         return this.scroll ? this.scroll.y : 0
       }

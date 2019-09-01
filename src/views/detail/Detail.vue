@@ -68,7 +68,7 @@
     },
     methods: {
         finImages() {
-          // this.$refs.scroll.scroll.refresh()
+          // this.$refs.scroll.refresh()
           this.homeImageLoad()
 
           //图片加载完成层之后能正确获取$el
@@ -164,8 +164,6 @@
         this.navbarTopY.push(this.$refs.paramInfo.$el.offsetTop - 44)
         this.navbarTopY.push(this.$refs.commentInfo.$el.offsetTop - 44)
         this.navbarTopY.push(this.$refs.recommends.$el.offsetTop - 44)
-        console.log('-------');
-        console.log(this.navbarTopY[1])
       }, 300)
     }
   }
