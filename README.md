@@ -8,7 +8,8 @@
   * 使用Vue-CLI3搭建，包括vue-router、vuex、axios数据请求等进行开发
   * API接口
     
-    项目所有的数据均来自真实的数据，请求的真实的数据API接口
+    项目所有的数据均来自真实的数据，请求的真实的数据API接口。
+    *注：接口数据来源，该接口由coderwhy博主提供，获取接口添加微信：coderwhy*
   
   * 使用Slider插件进行轮播图的封装
   * 移动端滚动
@@ -41,11 +42,16 @@
       
 * '分类'部分
     
+![home](https://github.com/GDYG/MGJ-mall/blob/master/src/assets/css/images/category.jpg)
+![home](https://github.com/GDYG/MGJ-mall/blob/master/src/assets/css/images/category2.jpg)
+    
 * '购物车'部分
 
 ![home](https://github.com/GDYG/MGJ-mall/blob/master/src/assets/css/images/cart.jpg)
 
 * '我的'部分
+
+![home](https://github.com/GDYG/MGJ-mall/blob/master/src/assets/css/images/profile.jpg)
 
 ## 项目的优点
   
